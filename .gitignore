@@ -1,0 +1,4 @@
+downloads/
+outputs/
+*.docx
+!assets/*.docx

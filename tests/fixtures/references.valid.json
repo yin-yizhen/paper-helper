@@ -1,0 +1,4 @@
+[
+  {"id": 1, "authors": ["张三"], "title": "城中村更新研究", "journal": "城市规划", "year": 2024, "issue": "2", "pages": "1-10", "cnki_url": "https://kns.cnki.net/example/1", "cnki_verified": true, "journal_index_verified": true, "journal_indexes": ["CSSCI"], "download_status": "downloaded", "download_path": "downloads/a.pdf", "citation_locations": ["1.1"]},
+  {"id": 2, "authors": ["李四"], "title": "社区治理研究", "journal": "规划师", "year": 2023, "issue": "5", "pages": "20-29", "cnki_url": "https://kns.cnki.net/example/2", "cnki_verified": true, "journal_index_verified": false, "journal_indexes": [], "download_status": "catalog_verified", "citation_locations": ["2.1"]}
+]
