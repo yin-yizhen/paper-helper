@@ -9,13 +9,13 @@ description: Create submission-ready Chinese university course papers from a top
 
 ## 0. 先做环境预检
 
-检查网络、**可见 Chrome 控制能力**、CNKI 访问会话、文件下载位置和 DOCX 生成/渲染能力。读取 [环境与失败恢复](references/environment-and-recovery.md)。
+检查网络、**可见 Chromium 浏览器控制能力**、CNKI 访问会话、文件下载位置和 DOCX 生成/渲染能力。读取 [环境与失败恢复](references/environment-and-recovery.md)。
 
-- CNKI 阶段默认使用用户**可见的 Chrome 窗口**，而非后台、无头或不可见浏览器会话；可见 Chrome 已打开时优先复用该窗口和登录会话。
-- 有 `cnki-search`、`cnki-paper-detail`、`cnki-download`、`cnki-journal-index` 时，也必须将其执行面绑定到可见 Chrome；不能仅在后台会话检索后声称用户可接手。
-- 没有 CNKI 专用 skill 但有可见 Chrome 控制能力时，读取 [CNKI 浏览器操作](references/cnki-browser-workflow.md)，在该窗口中完成检索和元数据提取。
-- 遇到登录、验证码、学校权限、付费页或 `ERR_CERT_*` 证书错误时，保持页面可见并立刻暂停，明确告诉用户在当前 Chrome 窗口操作；保留 `references.json` 和台账，随后继续。绝不绕过访问控制或忽略证书错误。
-- 不能打开或控制可见 Chrome 时，不得退回后台浏览器冒充 CNKI 核验；提示用户自行在 Chrome 打开 `https://kns.cnki.net/kns8s/search`，或仅交付“待 CNKI 核验”草稿。
+- CNKI 阶段默认使用用户**可见的 Chromium 浏览器窗口**，而非后台、无头或不可见浏览器会话；优先复用已打开的 Chrome，其次使用 Microsoft Edge。
+- 有 `cnki-search`、`cnki-paper-detail`、`cnki-download`、`cnki-journal-index` 时，也必须将其执行面绑定到可见 Chromium 浏览器；不能仅在后台会话检索后声称用户可接手。
+- 没有 CNKI 专用 skill 但有可见 Chromium 浏览器控制能力时，读取 [CNKI 浏览器操作](references/cnki-browser-workflow.md)，在该窗口中完成检索和元数据提取。
+- 遇到登录、验证码、学校权限、付费页或 `ERR_CERT_*` 证书错误时，保持页面可见并立刻暂停，明确告诉用户在当前浏览器窗口操作；保留 `references.json` 和台账，随后继续。绝不绕过访问控制或忽略证书错误。
+- 不能打开或控制可见 Chromium 浏览器时，不得退回后台浏览器冒充 CNKI 核验；提示用户自行在 Chrome 或 Edge 打开 `https://kns.cnki.net/kns8s/search`，或仅交付“待 CNKI 核验”草稿。
 
 ## 1. 最少打扰地确认任务
 
@@ -30,7 +30,7 @@ description: Create submission-ready Chinese university course papers from a top
 ## 2. 研究与来源闭环
 
 1. 将主题细化为研究问题、暂定题目、适配结构与字数分配；没有用户真实数据时，不写问卷、访谈、计量检验或虚构案例成效。
-2. 在可见 Chrome 中检索 CNKI，候选文献逐篇打开详情页核对作者、题名、期刊、年份/卷期页码或网络首发状态、详情链接与主题相关性。若 Chrome 显示验证码或证书错误，先由用户完成页面操作再继续。
+2. 在可见 Chromium 浏览器中检索 CNKI，候选文献逐篇打开详情页核对作者、题名、期刊、年份/卷期页码或网络首发状态、详情链接与主题相关性。若浏览器显示验证码或证书错误，先由用户完成页面操作再继续。
 3. 若用户要求核心期刊，逐刊使用 CNKI 期刊索引页核对，不得由印象推断等级。优先本学科 CSSCI、北大核心、CSCD 与权威专业期刊；不足时说明原因再补充普刊。
 4. 在任务目录保存 `references.json`，按 [参考文献数据约定](references/reference-data-contract.md) 记录每篇最终候选。运行：
 

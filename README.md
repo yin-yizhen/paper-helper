@@ -56,11 +56,11 @@ Copy-Item -Recurse .\paper-helper "$env:CODEX_HOME\skills\paper-helper"
 
 要获得“从主题到可交付 Word”的完整体验，需要：
 
-1. **可见 Chrome 与 CNKI 能力**：Codex 必须能打开/控制用户看得见的 Chrome，或环境中已有可绑定到该 Chrome 的 `cnki-search`、`cnki-paper-detail`、`cnki-journal-index`、`cnki-download` 等能力。CNKI 不应在后台浏览器里静默执行。
+1. **可见 Chromium 浏览器与 CNKI 能力**：Codex 必须能打开/控制用户看得见的 Chrome 或 Microsoft Edge；优先复用 Chrome，未安装 Chrome 时自动使用 Edge。环境中的 `cnki-search`、`cnki-paper-detail`、`cnki-journal-index`、`cnki-download` 等能力也必须能绑定到可见窗口。CNKI 不应在后台浏览器里静默执行。
 2. **CNKI 访问权限**：题录检索通常可以直接进行；下载全文需要你自己的 CNKI 账号或学校/机构权限。
 3. **Word 能力**：需要可用的 DOCX 创建环境；若要逐页视觉验收，还需要 LibreOffice 或等价渲染后端。
 
-**只安装本仓库，并不会自动给别人的 Codex 安装上述 Chrome 控制能力、CNKI 权限或 Word 渲染器。**首次运行时，skill 会进行预检并告诉你缺什么；缺少可见 Chrome 控制时仍能写提纲和待核验草稿，但不能声称文献已经核验。
+**只安装本仓库，并不会自动给别人的 Codex 安装上述 Chrome/Edge 控制能力、CNKI 权限或 Word 渲染器。**首次运行时，skill 会进行预检并告诉你缺什么；缺少可见浏览器控制时仍能写提纲和待核验草稿，但不能声称文献已经核验。
 
 如果 Chrome 出现验证码、登录页、机构授权页或 `ERR_CERT_*` 证书错误，skill 会把窗口保留在当前页面，让你手动处理后再继续；它不会在后台浏览器里绕开这个页面。
 
