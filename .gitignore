@@ -1,4 +1,6 @@
 downloads/
 outputs/
+__pycache__/
+*.py[cod]
 *.docx
 !assets/*.docx
