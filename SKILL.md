@@ -15,8 +15,8 @@ description: Create submission-ready Chinese university course papers from a top
 - 有 `cnki-search`、`cnki-paper-detail`、`cnki-download`、`cnki-journal-index` 时，也必须将其执行面绑定到可见、已连接的浏览器；不能仅在后台会话检索后声称用户可接手。
 - 没有 CNKI 专用 skill 但有可见 Chromium 浏览器控制能力时，读取 [CNKI 浏览器操作](references/cnki-browser-workflow.md)，在该窗口中完成检索和元数据提取。
 - 遇到登录、验证码、学校权限、付费页或 `ERR_CERT_*` 证书错误时，保持页面可见并立刻暂停，明确告诉用户在当前浏览器窗口操作；保留 `references.json` 和台账，随后继续。绝不绕过访问控制或忽略证书错误。
-- 不能打开或控制可见浏览器时，不得退回后台浏览器冒充 CNKI 核验，也不要通过 `Start-Process`、`cmd start` 或其他命令行方式反复强行启动桌面浏览器。直接提示用户自行在 Chrome 或 Edge 打开 `https://kns.cnki.net/kns8s/search`；用户回复“已打开/继续”后再检查是否存在可接管的浏览器连接，或仅交付“待 CNKI 核验”草稿。
-- 用户仅回复“继续”不等于浏览器已经连接，也不等于 CNKI 已恢复。只有实际读取到 CNKI 结果页的检索框或结果列表后，才能进入文献核验。若页面是 418、`ERR_CERT_*`、登录/验证码或无法访问页，停止在来源门，不写参考文献和“已核验”标记。
+- 不能打开或控制可见浏览器时，不得退回后台浏览器冒充 CNKI 核验，也不要通过 `Start-Process`、`cmd start` 或其他命令行方式反复强行启动桌面浏览器。直接报告阻塞原因和恢复条件，然后结束本次任务；**不得**生成题目、提纲、草稿、参考文献、台账或 DOCX。
+- 用户仅回复“继续”不等于浏览器已经连接，也不等于 CNKI 已恢复。只有实际读取到 CNKI 结果页的检索框或结果列表后，才能进入文献核验。若页面是 418、`ERR_CERT_*`、登录/验证码或无法访问页，立即停止在来源门；不写论文、不写参考文献、不创建“待核验版”，仅等待用户恢复可访问、可接管的 CNKI 页面后重新开始。
 
 ## 1. 最少打扰地确认任务
 
