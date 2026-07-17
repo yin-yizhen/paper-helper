@@ -11,11 +11,11 @@ description: Create submission-ready Chinese university course papers from a top
 
 检查网络、**可见浏览器连接能力**、CNKI 访问会话、文件下载位置和 DOCX 生成/渲染能力。读取 [浏览器就绪门](references/browser-readiness.md) 与 [环境与失败恢复](references/environment-and-recovery.md)。
 
-- CNKI 阶段默认使用用户**可见的浏览器窗口**，而非后台、无头或不可见浏览器会话。需要自动接管时，优先使用已连接的 Chrome 扩展会话或 Codex 应用内浏览器；不要仅因 Windows 安装了 Edge 就宣称能够自动控制 Edge。
+- CNKI 阶段默认使用用户**可见的浏览器窗口**。按“应用内浏览器选中/已有标签 → 已连接的用户浏览器标签 → 新建应用内 CNKI 标签”自动尝试；三条路径都失败后才要求用户手动处理。不要仅因 Windows 安装了 Edge 就宣称能够自动控制 Edge。
 - 有 `cnki-search`、`cnki-paper-detail`、`cnki-download`、`cnki-journal-index` 时，也必须将其执行面绑定到可见、已连接的浏览器；不能仅在后台会话检索后声称用户可接手。
 - 没有 CNKI 专用 skill 但有可见 Chromium 浏览器控制能力时，读取 [CNKI 浏览器操作](references/cnki-browser-workflow.md)，在该窗口中完成检索和元数据提取。
 - 遇到登录、验证码、学校权限、付费页或 `ERR_CERT_*` 证书错误时，保持页面可见并立刻暂停，明确告诉用户在当前浏览器窗口操作；保留 `references.json` 和台账，随后继续。绝不绕过访问控制或忽略证书错误。
-- 不能打开或控制可见浏览器时，不得退回后台浏览器冒充 CNKI 核验，也不要通过 `Start-Process`、`cmd start` 或其他命令行方式反复强行启动桌面浏览器。直接报告阻塞原因和恢复条件，然后结束本次任务；**不得**生成题目、提纲、草稿、参考文献、台账或 DOCX。
+- 不能打开或控制可见浏览器时，不得退回后台浏览器冒充 CNKI 核验，也不要通过 `Start-Process`、`cmd start` 或其他命令行方式反复强行启动桌面浏览器。完成上述三种自动接管尝试后，报告阻塞原因并硬停止；**不得**生成题目、提纲、草稿、参考文献、台账或 DOCX。
 - 用户仅回复“继续”不等于浏览器已经连接，也不等于 CNKI 已恢复。只有实际读取到 CNKI 结果页的检索框或结果列表后，才能进入文献核验。若页面是 418、`ERR_CERT_*`、登录/验证码或无法访问页，立即停止在来源门；不写论文、不写参考文献、不创建“待核验版”，仅等待用户恢复可访问、可接管的 CNKI 页面后重新开始。
 
 ## 1. 最少打扰地确认任务
@@ -32,15 +32,21 @@ description: Create submission-ready Chinese university course papers from a top
 
 1. 将主题细化为研究问题、暂定题目、适配结构与字数分配；没有用户真实数据时，不写问卷、访谈、计量检验或虚构案例成效。
 2. 在可见 Chromium 浏览器中检索 CNKI，候选文献逐篇打开详情页核对作者、题名、期刊、年份/卷期页码或网络首发状态、详情链接与主题相关性。若浏览器显示验证码或证书错误，先由用户完成页面操作再继续。
-3. 若用户要求核心期刊，逐刊使用 CNKI 期刊索引页核对，不得由印象推断等级。优先本学科 CSSCI、北大核心、CSCD 与权威专业期刊；不足时说明原因再补充普刊。
-4. 在任务目录保存 `references.json`，按 [参考文献数据约定](references/reference-data-contract.md) 记录每篇最终候选。运行：
+3. 每次换关键词、检索模式或翻页后重新应用并读取筛选状态，防止 CNKI 自动清空核心/年份条件。验证码只有在样式、透明度、尺寸和视口位置均表明真正可见时才算阻塞。
+4. 若用户要求核心期刊，逐刊使用 CNKI 期刊索引页精确匹配完整刊名并保存页面证据，不得由印象、最近浏览或推荐结果推断等级。优先本学科 CSSCI、北大核心、CSCD 与权威专业期刊；不足时说明原因再补充普刊。
+5. 默认 6000 字综述使用 15—20 篇最终来源，以近五年为主并保留 2—4 篇真正重要的早期文献；不要全部依赖同一年网络首发文章。其他字数按论证需要调整。
+6. 在任务目录保存 `references.json`，按 [参考文献数据约定](references/reference-data-contract.md) 记录每篇最终候选。候选阶段可运行普通结构校验：
 
    ```powershell
    python scripts/reference_ledger.py references.json --report 文献核验结果.md
    ```
 
-5. 锁定“最终引用清单”后，才下载其全文。逐篇记录 `download_status`；只要下载被登录/权限阻断，就如实保留状态。不要下载未进入正文的备选文献。
-6. 建立“观点—来源—正文位置”对应关系。外部事实、统计数字、他人结论和具体案例过程必须有已核验来源；只看见题录/摘要的文章，不把摘要细节当作已通读全文的结论。
+7. 锁定“最终引用清单”后，下载并实际通读**全部**最终全文，记录本地路径、阅读状态及“观点—全文页码/章节—正文位置”。只要一篇被登录/权限/付费阻断，就保存证据并硬停止；不得依靠摘要先写论文。
+8. 动笔前运行最终来源硬门禁；非零退出时不得进入写作：
+
+   ```powershell
+   python scripts/reference_ledger.py references.json --require-final --report 文献核验结果.md
+   ```
 
 ## 3. 写作规则
 
@@ -57,9 +63,10 @@ description: Create submission-ready Chinese university course papers from a top
 
 ```powershell
 python scripts/check_citations.py "论文题目.md" references.json --report 引文一致性检查.md
+python scripts/count_manuscript.py "论文题目.md" --target 6000 --report 字数检查.json
 ```
 
-修复所有错误后再进入交付：每篇参考文献至少有一处正文引文；每个 `[n]` 都指向存在、已核验的条目；不保留未引用条目。脚本只检查数字顺序制的基本闭环，不能替代人工核对论断是否被来源支持。
+将 `--target` 替换为用户确认字数。字数脚本不计题目、摘要、关键词和参考文献。修复所有错误后再进入交付：每篇参考文献至少有一处正文引文；每个 `[n]` 都指向存在、已核验且通读的条目；不保留未引用条目。脚本只检查基本闭环，人工还要逐条核对正文论断与 `claim_support_locations`。
 
 ## 5. Word 交付与视觉验收
 
@@ -69,7 +76,7 @@ python scripts/check_citations.py "论文题目.md" references.json --report 引
 python scripts/build_course_paper_docx.py "论文题目.md" --references references.json --output "论文题目.docx"
 ```
 
-生成后必须按 `documents` 工作流渲染为 PNG，逐页检查标题、正文、页边距、参考文献编号、换页、中文字符与模板样式；修复后重新渲染。若没有 DOCX 渲染能力，交付说明中必须写明“未完成视觉验收”。
+生成后必须按 `documents` 工作流渲染为 PNG，逐页检查标题、正文、页边距、参考文献编号、换页、中文字符与模板样式；修复后重新渲染。用户要求“直接使用/最终交付”时，没有 DOCX 渲染能力就硬停止，不能把未验收文件称为最终版。网络首发必须输出 `[J/OL]`，不能虚构卷期页码。
 
 ## 6. 交付清单
 
@@ -78,6 +85,7 @@ python scripts/build_course_paper_docx.py "论文题目.md" --references referen
 1. `论文题目.docx`：题目、摘要、关键词、正文、参考文献。
 2. `文献核验结果.md`：CNKI 题录、期刊等级核验、下载状态、正文引文位置。
 3. `引文一致性检查.md`：引用编号、未引用条目和数据约束检查结果。
-4. `references.json`：可继续下载、复核和修改的机器可读台账。
+4. `字数检查.json`：不含参考文献和 Markdown 标记的正文有效长度。
+5. `references.json`：包含 CNKI 页面证据、稳定标识、期刊等级证据、全文路径和论断页码的机器可读台账。
 
 交付说明必须列出实际字数、论文类型、已核验篇数、已下载篇数、未下载原因、DOCX 是否已渲染验收和提交前仍需用户处理的事项。不得宣称保证通过查重或替代学校最终审核。

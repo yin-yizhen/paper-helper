@@ -1,4 +1,4 @@
 interface:
   display_name: "论文助手"
-  short_description: "核验知网中文期刊文献并生成可审计课程论文与Word交付件"
-  default_prompt: "Use $paper-helper to write a CNKI-verified Chinese course paper from my topic."
+  short_description: "全文核验知网文献并生成可审计、已验收的课程论文与Word"
+  default_prompt: "Use $paper-helper to produce a Chinese course paper only after every final CNKI source is verified, downloaded, and read."

@@ -27,6 +27,11 @@ def parse_markdown(source: str) -> tuple[str, list[tuple[str, int, str]]]:
 
 def reference_text(item: dict) -> str:
     authors = "，".join(item.get("authors", []))
+    if item.get("publication_status") == "online_first":
+        date = item.get("online_first_date") or item.get("year", "")
+        url = item.get("stable_cnki_url") or item.get("cnki_url", "")
+        accessed = item.get("accessed_at", "")
+        return f"[{item['id']}] {authors}. {item['title']}[J/OL]. {item['journal']}, {date}. {url}[{accessed}]."
     vi = str(item.get("volume") or "")
     if item.get("issue"):
         vi += f"({item['issue']})"
