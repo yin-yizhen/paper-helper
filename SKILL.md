@@ -15,7 +15,7 @@ description: Create submission-ready Chinese university course papers from a top
 - 有 `cnki-search`、`cnki-paper-detail`、`cnki-download`、`cnki-journal-index` 时，也必须将其执行面绑定到可见 Chromium 浏览器；不能仅在后台会话检索后声称用户可接手。
 - 没有 CNKI 专用 skill 但有可见 Chromium 浏览器控制能力时，读取 [CNKI 浏览器操作](references/cnki-browser-workflow.md)，在该窗口中完成检索和元数据提取。
 - 遇到登录、验证码、学校权限、付费页或 `ERR_CERT_*` 证书错误时，保持页面可见并立刻暂停，明确告诉用户在当前浏览器窗口操作；保留 `references.json` 和台账，随后继续。绝不绕过访问控制或忽略证书错误。
-- 不能打开或控制可见 Chromium 浏览器时，不得退回后台浏览器冒充 CNKI 核验；提示用户自行在 Chrome 或 Edge 打开 `https://kns.cnki.net/kns8s/search`，或仅交付“待 CNKI 核验”草稿。
+- 不能打开或控制可见 Chromium 浏览器时，不得退回后台浏览器冒充 CNKI 核验，也不要通过 `Start-Process`、`cmd start` 或其他命令行方式反复强行启动桌面浏览器。直接提示用户自行在 Chrome 或 Edge 打开 `https://kns.cnki.net/kns8s/search`；用户回复“已打开/继续”后再检查可接管状态，或仅交付“待 CNKI 核验”草稿。
 
 ## 1. 最少打扰地确认任务
 

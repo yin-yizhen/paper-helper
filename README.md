@@ -64,6 +64,14 @@ Copy-Item -Recurse .\paper-helper "$env:CODEX_HOME\skills\paper-helper"
 
 如果 Chrome 出现验证码、登录页、机构授权页或 `ERR_CERT_*` 证书错误，skill 会把窗口保留在当前页面，让你手动处理后再继续；它不会在后台浏览器里绕开这个页面。
 
+如果 Codex 说“系统禁止启动 Edge/Chrome”或提到 `Start-Process`、`cmd start` 被拦截，按下面做即可：
+
+1. 自己打开 Edge 或 Chrome。
+2. 在地址栏打开 `https://kns.cnki.net/kns8s/search`。
+3. 回到 Codex 回复“已打开，继续”。
+
+这不是知网账号出错，而是该电脑不允许 Codex 通过命令行弹出桌面应用。新版 skill 会直接走上述交接，不再反复尝试命令行启动。
+
 ## 最简单的使用方式
 
 只给主题也可以：

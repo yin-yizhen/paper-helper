@@ -22,7 +22,7 @@
 ## 风险与验收
 
 - CNKI 登录、验证码和权限不能自动绕过；状态必须写入台账。
-- CNKI 访问必须在用户可见 Chrome 或 Edge 中进行；优先 Chrome，未安装时用 Edge。`ERR_CERT_*` 时停在当前窗口让用户处理，不能切到后台浏览器或忽略证书错误。
+- CNKI 访问必须在用户可见 Chrome 或 Edge 中进行；优先 Chrome，未安装时用 Edge。`ERR_CERT_*` 时停在当前窗口让用户处理，不能切到后台浏览器或忽略证书错误；若桌面窗口启动被系统拦截，要求用户手动打开浏览器，禁止反复用 `Start-Process`/`cmd start` 尝试。
 - `journal_indexes` 只有完成 CNKI 期刊索引页核验后才能填入。
 - `build_course_paper_docx.py` 是无模板的基础生成器；有用户模板时应由 documents 工作流优先复用模板。
 - 运行 `powershell -ExecutionPolicy Bypass -File tests/run_smoke_tests.ps1`；再运行 skill-creator 的 `quick_validate.py`。DOCX 改动还需实际生成、渲染并检查所有页。若机器没有 LibreOffice/等价渲染后端，记录“未完成视觉验收”，不可伪称已验收。
