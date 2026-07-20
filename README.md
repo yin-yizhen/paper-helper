@@ -56,7 +56,7 @@ Copy-Item -Recurse .\paper-helper "$env:CODEX_HOME\skills\paper-helper"
 
 要获得“从主题到可交付 Word”的完整体验，需要：
 
-1. **可见浏览器与 CNKI 能力**：skill 会先复用应用内浏览器已有标签，再尝试已连接的用户浏览器，最后自行新建应用内 CNKI 标签。三条路径都失败后才会请你手动连接。Edge 可用于人工登录/验证，但“电脑安装了 Edge”不等于 Codex 能自动控制它。
+1. **Chrome 与 CNKI 能力**：skill 固定优先使用已连接的 Chrome profile，以复用登录、机构授权、验证码和下载权限：已有 Chrome CNKI 标签 → Chrome 新标签 → 经你同意启动 Chrome → 应用内浏览器题录检索兜底。不会通过系统默认浏览器打开 CNKI，因此不会把页面误送到 Edge。
 2. **CNKI 访问权限**：题录检索通常可以直接进行；下载全文需要你自己的 CNKI 账号或学校/机构权限。
 3. **Word 能力**：需要可用的 DOCX 创建环境与 LibreOffice（或等价渲染后端）。没有渲染后端可以形成内部预览，但不得标为“可直接提交”的最终版。
 
@@ -64,9 +64,9 @@ Copy-Item -Recurse .\paper-helper "$env:CODEX_HOME\skills\paper-helper"
 
 如果 Chrome 出现验证码、登录页、机构授权页或 `ERR_CERT_*` 证书错误，skill 会把窗口保留在当前页面，让你手动处理后再继续；它不会在后台浏览器里绕开这个页面。
 
-如果 Codex 说“系统禁止启动 Edge/Chrome”或提到 `Start-Process`、`cmd start` 被拦截，按下面做即可：
+如果 Chrome 没有运行但插件启动条件正常，skill 会先问你是否允许启动 Chrome；同意后才会通过插件提供的启动器打开同一 profile。若当前环境没有该启动器，按下面做即可：
 
-1. 自己打开 Edge 或 Chrome。
+1. 自己打开 Chrome。
 2. 在地址栏打开 `https://kns.cnki.net/kns8s/search`。
 3. 回到 Codex 回复“已打开，继续”。
 
@@ -74,9 +74,9 @@ Copy-Item -Recurse .\paper-helper "$env:CODEX_HOME\skills\paper-helper"
 
 ### 为什么我说“继续”，skill 还是不能查知网？
 
-“继续”只是触发重新检查。skill 会依次查看应用内浏览器的选中/已有标签、已连接的用户浏览器标签，并尝试新建应用内标签；只有这些都失败才会明确说明“浏览器未连接”。
+“继续”只是触发重新检查。skill 会先检查 Chrome 里的知网页签和 Chrome 新标签路径；Chrome 不可用时才会明确说明应用内浏览器只能作为题录检索兜底。
 
-此时需先连接 Codex 的 Chrome 扩展会话或使用 Codex 应用内浏览器。页面显示 418、证书错误、验证码或登录页时，skill 会停在该门槛并结束本次任务；恢复后请重新发起任务。
+此时需先连接 Codex 的 Chrome 扩展会话。页面显示 418、证书错误、登录或“安全验证”时，skill 会保留并前台显示该 Chrome 标签；请切到标题为“安全验证”或 CNKI 的标签完成操作后再说“继续”。
 
 ## 最简单的使用方式
 

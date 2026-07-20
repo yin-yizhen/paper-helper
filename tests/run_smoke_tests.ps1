@@ -7,6 +7,7 @@ New-Item -ItemType Directory -Force -Path $out | Out-Null
 python (Join-Path $root 'scripts\reference_ledger.py') (Join-Path $fixture 'references.valid.json') --require-final --report (Join-Path $out 'ledger.md')
 python (Join-Path $root 'scripts\check_citations.py') (Join-Path $fixture 'manuscript.md') (Join-Path $fixture 'references.valid.json') --report (Join-Path $out 'citations.md')
 python (Join-Path $root 'scripts\count_manuscript.py') (Join-Path $fixture 'manuscript.md') --report (Join-Path $out 'word-count.json')
+python (Join-Path $PSScriptRoot 'verify_cnki_browser_policy.py')
 $oldPreference = $ErrorActionPreference
 $ErrorActionPreference = 'Continue'
 python (Join-Path $root 'scripts\reference_ledger.py') (Join-Path $fixture 'references.invalid.json') --require-final --report (Join-Path $out 'invalid-ledger.md')
